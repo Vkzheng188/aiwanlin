@@ -1,65 +1,181 @@
-Multi-Agent Skill Hub｜多智能体技能共享中心
-A standardized, pluggable skill ecosystem for multi-agent collaboration, enabling skill definition, distribution, scheduling and cross-agent reuse.
-📌 项目简介
-本仓库是面向多智能体系统的可复用 Skill 技能共享与调度底座，解决传统多 Agent 项目能力耦合、技能无法沉淀、调用逻辑混乱、难以跨智能体复用的痛点。
-将各类工具能力、业务流程、任务步骤封装为标准化独立 Skill
-支持总控 Agent 自动路由匹配技能、分配子智能体执行
-提供统一技能注册、加载、校验、权限、版本管理机制
-开放社区共建模式，任何人可提交自定义技能合并入库，实现技能开源共享
-✨ 核心特性
-标准化 Skill 规范
-统一 SKILL.yaml/SKILL.md 定义模板，包含技能名称、触发条件、入参、执行逻辑、依赖、权限、示例调用，适配 AutoGen、LangGraph、CrewAI、Qwen-Agent、DeepSeek-Agent 等主流多智能体框架。
-多智能体协同调度
-协调中心：任务拆解 + 技能匹配 + 智能体指派
-角色隔离：不同 Agent 绑定专属可用技能，避免权限越界
-串行 / 并行 / 分支执行模式，支持复杂长链路任务编排
-热插拔 & 动态管理
-无需重启系统即可新增 / 禁用 / 更新技能；支持本地技能、仓库远程拉取技能双模式，一键导入复用。
-技能共享与社区共建
-分类收纳通用工具类、开发类、数据分析类、办公类、垂直业务类技能
-提供 PR 提交模板、技能校验 CI 流水线，规范化贡献流程
-技能索引检索、标签分类、调用样例文档，快速查找复用
-可靠性保障
-参数校验、调用超时熔断、执行日志追踪、异常捕获回滚、调用频次限流，适配生产环境部署。
-📂 仓库目录结构
-plaintext
-multi-agent-skill-hub/
-├── skills/                  # 公共共享技能库（社区可提交新增）
-│   ├── tool/                # 通用工具技能（搜索、文件、接口、计算等）
-│   ├── dev/                 # 开发运维技能（代码生成、测试、Git、部署）
-│   ├── data/                # 数据处理、解析、可视化技能
-│   ├── office/              # 文档、表格、总结、邮件处理技能
-│   ├── custom-template/     # 自定义技能模板（新建技能参考）
-│   └── skill-registry.json  # 全局技能注册表
-├── src/
-│   ├── skill_loader.py       # 技能加载、解析、校验引擎
-│   ├── agent_orchestrator.py# 多智能体调度核心
-│   ├── router.py            # 意图-技能匹配路由
-│   └── utils/               # 工具、日志、权限、版本工具
-├── examples/                # 多智能体调用技能示例代码
-├── docs/                    # 技能编写规范、接入文档、贡献指南
-├── tests/                   # 技能单元测试
-├── .github/workflows/       # CI：技能格式校验、自动测试、合并检查
-└── README.md
-🚀 快速接入示例
-python
-运行
-from src.agent_orchestrator import MultiAgentOrchestrator
+# Multi-Agent Collaborative Programming System
 
-# 初始化调度器，加载全部共享技能
-orchestrator = MultiAgentOrchestrator(skill_path="./skills")
+[English](#english) | [中文](#中文)
 
-# 下发任务，自动匹配对应技能并分配智能体协作执行
-result = orchestrator.run_task("整理CSV数据并生成可视化图表")
-print(result)
-🤝 技能贡献与共享方式
-Fork 本仓库，基于 custom-template 创建你的自定义 Skill 文件夹
-补全 SKILL.yaml 配置、调用示例、说明文档
-本地自测通过后提交 Pull Request
-仓库自动 CI 校验格式与可用性，审核合并后纳入公共技能库，供所有使用者一键引用
-🧩 适配框架
-CrewAI / AutoGen / LangGraph
-LlamaIndex Agent、LangChain Agent
-通义千问、DeepSeek、Claude、GPT 系列自研多智能体系统
-📄 License
-MIT License，允许个人 / 商业自由使用、修改、分发，欢迎持续共建多智能体技能生态。
+---
+
+<a id="english"></a>
+
+## 🌐 English
+
+### Overview
+
+A multi-agent collaborative programming framework that enables autonomous AI agents to work together on complex software development tasks. Through intelligent orchestration and dynamic role assignment, multiple specialized agents coordinate to analyze requirements, design architecture, write code, review quality, and deliver production-ready solutions.
+
+### ✨ Key Features
+
+- **Agent Orchestration Engine** — Dynamically compose agent teams based on task complexity, with support for sequential, parallel, and hierarchical execution patterns
+- **Role-Based Agent Specialization** — Pre-configured agent roles including Architect, Developer, Reviewer, Tester, and DevOps, each with domain-specific expertise
+- **Shared Context Memory** — Persistent cross-agent memory layer that allows agents to share discoveries, decisions, and constraints throughout the workflow
+- **Conflict Resolution Protocol** — Built-in mechanisms for detecting and resolving contradictions between agent outputs, ensuring coherent deliverables
+- **Human-in-the-Loop Checkpoints** — Configurable intervention points where human review is required before proceeding to critical stages
+- **Extensible Agent Protocol** — Define custom agent roles and behaviors through a declarative configuration system
+
+### 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│              Orchestrator Agent              │
+│    (Task Decomposition & Scheduling)        │
+├──────────┬──────────┬──────────┬────────────┤
+│          │          │          │            │
+│ Architect│ Developer│ Reviewer │  Tester    │
+│  Agent   │  Agent   │  Agent   │  Agent     │
+│          │          │          │            │
+├──────────┴──────────┴──────────┴────────────┤
+│          Shared Context & Memory            │
+├─────────────────────────────────────────────┤
+│         Tool Layer (Git, LSP, CI/CD)        │
+└─────────────────────────────────────────────┘
+```
+
+### 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/<your-username>/<repo-name>.git
+cd <repo-name>
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure agent roles
+cp config/agents.example.yaml config/agents.yaml
+
+# Run the orchestrator
+python main.py --task "Build a REST API with authentication"
+```
+
+### 📋 Supported Orchestration Patterns
+
+| Pattern | Description | Use Case |
+|---------|-------------|----------|
+| Sequential | Agents execute in a fixed pipeline | Simple linear workflows |
+| Parallel | Multiple agents work simultaneously | Independent subtasks |
+| Hierarchical | Supervisor delegates to sub-teams | Complex multi-module projects |
+| Dynamic | Real-time routing based on intermediate results | Adaptive problem solving |
+
+### 🛠️ Tech Stack
+
+- **Agent Framework**: [CrewAI / AutoGen / LangGraph / Custom]
+- **LLM Backend**: OpenAI GPT-4 / Claude / Local Models
+- **Communication**: Message-passing with shared blackboard architecture
+- **State Management**: Persistent graph-based context store
+- **Observability**: Built-in tracing, token tracking, and execution logs
+
+### 📖 Documentation
+
+- [Architecture Design](docs/architecture.md)
+- [Agent Configuration Guide](docs/agent-config.md)
+- [Orchestration Patterns](docs/patterns.md)
+- [API Reference](docs/api.md)
+- [Contributing Guide](CONTRIBUTING.md)
+
+### 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+### 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<a id="中文"></a>
+
+## 🇨🇳 中文
+
+### 项目简介
+
+一个多智能体协作编程框架，支持多个自主 AI Agent 协同完成复杂的软件开发任务。通过智能编排和动态角色分配，多个专业化 Agent 协同工作，完成需求分析、架构设计、代码编写、质量审查和生产级交付。
+
+### ✨ 核心特性
+
+- **智能编排引擎** — 根据任务复杂度动态组建 Agent 团队，支持串行、并行和层级式执行模式
+- **角色化 Agent 分工** — 预置架构师、开发者、审查者、测试工程师、运维工程师等专业角色，各具领域专长
+- **共享上下文记忆** — 持久化跨 Agent 记忆层，在工作流中共享发现、决策和约束条件
+- **冲突消解协议** — 内置机制检测并解决 Agent 输出之间的矛盾，确保交付物的一致性
+- **人机协同检查点** — 可配置的人工介入节点，在关键阶段前需人工审核确认
+- **可扩展 Agent 协议** — 通过声明式配置系统自定义 Agent 角色和行为
+
+### 🏗️ 系统架构
+
+```
+┌─────────────────────────────────────────────┐
+│              编排调度 Agent                   │
+│       (任务分解 & 调度分配)                    │
+├──────────┬──────────┬──────────┬────────────┤
+│          │          │          │            │
+│ 架构师    │ 开发者    │ 审查者   │  测试工程师 │
+│  Agent   │  Agent   │  Agent   │   Agent    │
+│          │          │          │            │
+├──────────┴──────────┴──────────┴────────────┤
+│            共享上下文与记忆层                   │
+├─────────────────────────────────────────────┤
+│          工具层 (Git, LSP, CI/CD)            │
+└─────────────────────────────────────────────┘
+```
+
+### 🚀 快速开始
+
+```bash
+# 克隆仓库
+git clone https://github.com/<your-username>/<repo-name>.git
+cd <repo-name>
+
+# 安装依赖
+pip install -r requirements.txt
+
+# 配置 Agent 角色
+cp config/agents.example.yaml config/agents.yaml
+
+# 启动编排器
+python main.py --task "构建一个带认证功能的 REST API"
+```
+
+### 📋 支持的编排模式
+
+| 模式 | 说明 | 适用场景 |
+|------|------|---------|
+| 串行模式 | Agent 按固定流水线依次执行 | 简单线性工作流 |
+| 并行模式 | 多个 Agent 同时工作 | 相互独立的子任务 |
+| 层级模式 | 主管 Agent 向子团队分配任务 | 复杂多模块项目 |
+| 动态模式 | 根据中间结果实时路由 | 自适应问题求解 |
+
+### 🛠️ 技术栈
+
+- **Agent 框架**: [CrewAI / AutoGen / LangGraph / 自研]
+- **大模型后端**: OpenAI GPT-4 / Claude / 本地模型
+- **通信机制**: 消息传递 + 共享黑板架构
+- **状态管理**: 持久化图结构上下文存储
+- **可观测性**: 内置链路追踪、Token 统计和执行日志
+
+### 📖 文档
+
+- [架构设计](docs/architecture.md)
+- [Agent 配置指南](docs/agent-config.md)
+- [编排模式详解](docs/patterns.md)
+- [API 参考](docs/api.md)
+- [贡献指南](CONTRIBUTING.md)
+
+### 🤝 参与贡献
+
+欢迎贡献！请阅读[贡献指南](CONTRIBUTING.md)了解行为准则和提交流程。
+
+### 📄 开源协议
+
+本项目基于 MIT 协议开源 — 详见 [LICENSE](LICENSE) 文件。
+
+---
+
+> **Tip:** Replace `<your-username>` and `<repo-name>` with your actual GitHub path. Adjust the tech stack section to match your actual implementation.
